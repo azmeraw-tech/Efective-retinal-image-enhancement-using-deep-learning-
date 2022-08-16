@@ -4,7 +4,7 @@ import cv2
 import tensorflow as tf
 import numpy as np
 import os
-from model.desubpixel import DeSubpixelConv2d
+import DeSubpixelConv2d
 
 class Edsr:
 
