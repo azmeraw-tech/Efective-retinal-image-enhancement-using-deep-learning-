@@ -83,6 +83,25 @@ class Edsr:
 
         return out, loss, train_op, psnr, ssim, lr
 
+    def conv(x, in_feats, out_feats, kernel_sizes=(3, 3), strides=(1, 1), norm=None, act=None, conv_type='default',
+             name='conv'):
+        with tf.variable_scope(name):
+            if conv_type == 'default':
+                x = Conv2d(x, out_feats, kernel_sizes, strides, act=act,
+                           W_init=init(in_feats, kernel_sizes[0]),
+                           b_init=init(in_feats, kernel_sizes[0]))
+
+            elif conv_type == 'depth_wise':
+                x = DepthwiseConv2d(x, kernel_sizes, strides, act=tf.nn.relu, W_init=init(in_feats),
+                                    b_init=init(in_feats), name='depthwise')
+                x = Conv2d(x, out_feats, (1, 1), (1, 1), act=act,
+                           W_init=init(in_feats, kernel_sizes[0]),
+                           b_init=init(in_feats, kernel_sizes[0]), name='conv')
+
+            else:
+                raise Exception('Unknown conv type', conv_type)
+        return x
+
     def downsample(x, n_feats, scale=4, conv_type='default', sample_type='subpixel', name='downsample'):
         with tf.variable_scope(name):
             if sample_type == 'desubpixel':
@@ -94,7 +113,6 @@ class Edsr:
                     x = DeSubpixelConv2d(x, 2, name='pixel_deshuffle1')
                     x = conv(x, 12, n_feats // 4, (1, 1), act=None, conv_type=conv_type, name='conv2')
                     x = DeSubpixelConv2d(x, 2, name='pixel_deshuffle2')
-
         return x
 
 
