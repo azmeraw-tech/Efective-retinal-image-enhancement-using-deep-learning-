@@ -124,6 +124,8 @@ class Edsr:
 
         x = tf.nn.conv2d(x, filter=self.resFilters[f_nr+1], strides=[1, 1, 1, 1], padding='SAME')
         x = x + self.resBiases[f_nr+1]
+        x=tfa.layers.InstanceNormalization(x)
+        x = tf.nn.relu(x)
         x = x * self.scaling_factor
 
         return inpt + x
