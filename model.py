@@ -94,11 +94,6 @@ class Edsr:
                     x = DeSubpixelConv2d(x, 2, name='pixel_deshuffle1')
                     x = conv(x, 12, n_feats // 4, (1, 1), act=None, conv_type=conv_type, name='conv2')
                     x = DeSubpixelConv2d(x, 2, name='pixel_deshuffle2')
-            elif sample_type == 'bicubic':
-                x = RestoreLayer(x, 0.5, 255)
-                x = Bicubic(x)
-                x = NormalizeLayer(x, 0.5, 255)
-                x = conv(x, 3, n_feats, (1, 1), act=tf.nn.relu, name='conv1')
 
         return x
 
@@ -106,7 +101,7 @@ class Edsr:
     def resBlock(self, inpt, f_nr):
         x = tf.nn.conv2d(inpt, filter=self.resFilters[f_nr], strides=[1, 1, 1, 1], padding='SAME')
         x = x + self.resBiases[f_nr]
-        x=tfa.layers.InstanceNormalization(X)
+        x=tfa.layers.InstanceNormalization(x)
         x = tf.nn.relu(x)
 
         x = tf.nn.conv2d(x, filter=self.resFilters[f_nr+1], strides=[1, 1, 1, 1], padding='SAME')
