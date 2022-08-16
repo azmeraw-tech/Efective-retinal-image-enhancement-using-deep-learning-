@@ -106,6 +106,7 @@ class Edsr:
     def resBlock(self, inpt, f_nr):
         x = tf.nn.conv2d(inpt, filter=self.resFilters[f_nr], strides=[1, 1, 1, 1], padding='SAME')
         x = x + self.resBiases[f_nr]
+        x=tfa.layers.InstanceNormalization(X)
         x = tf.nn.relu(x)
 
         x = tf.nn.conv2d(x, filter=self.resFilters[f_nr+1], strides=[1, 1, 1, 1], padding='SAME')
