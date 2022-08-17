@@ -26,12 +26,8 @@ class Edsr:
             self.resFilters.append( tf.get_variable("resFilter%d" % (i), shape=[3,3,F], initializer=self.xavier))
             self.resBiases.append(tf.get_variable(name="resBias%d" % (i), shape=[F], initializer=self.bias_initializer))
 
-        #self.filter_one = tf.get_variable("resFilter_one", shape=[3,3,3,F], initializer=self.xavier)
-        self.filter_two = tf.get_variable("resFilter_two", shape=[3,3,F,F], initializer=self.xavier)
-        self.filter_three = tf.get_variable("resFilter_three", shape=[3,3,F,self.PS], initializer=self.xavier)
 
-        #self.bias_one = tf.get_variable(shape=[F], initializer=self.bias_initializer, name="BiasOne")
-        self.bias_two = tf.get_variable(shape=[F], initializer=self.bias_initializer, name="BiasTwo")
+        self.filter_three = tf.get_variable("resFilter_three", shape=[3,3,F,self.PS], initializer=self.xavier)
         self.bias_three = tf.get_variable(shape=[self.PS], initializer=self.bias_initializer, name="BiasThree")
 
 
@@ -49,10 +45,6 @@ class Edsr:
         # all residual blocks
         for i in range(self.B):
             x = self.resBlock(x, (i*2))
-
-        
-        x = tf.nn.conv2d(x, filter=self.filter_two, strides=[1, 1, 1, 1], padding='SAME')
-        x = x + self.bias_two
 
         # upsample via sub-pixel, equivalent to depth to space
         x = tf.nn.conv2d(x, filter=self.filter_three, strides=[1, 1, 1, 1], padding='SAME')
