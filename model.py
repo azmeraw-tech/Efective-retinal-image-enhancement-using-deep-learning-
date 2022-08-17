@@ -55,11 +55,12 @@ class Edsr:
         # last conv
         x = tf.nn.conv2d(x, filter=self.filter_two, strides=[1, 1, 1, 1], padding='SAME')
         x = x + self.bias_two
-        x = x + out1
+
         # upsample via sub-pixel, equivalent to depth to space
         x = tf.nn.conv2d(x, filter=self.filter_three, strides=[1, 1, 1, 1], padding='SAME')
         x = x + self.bias_three
         out = tf.depth_to_space(x, self.scale, data_format='NHWC', name="NHWC_output")
+        x = x + out1
 
         # -- --
 
