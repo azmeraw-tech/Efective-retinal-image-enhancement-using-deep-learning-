@@ -40,11 +40,9 @@ class Edsr:
 
         # -- Model architecture --
 
-        # first conv
-        x = tf.nn.conv2d(x, filter=self.filter_one, strides=[1, 1, 1, 1], padding='SAME')
-        x = x + self.bias_one
+
+
         out1 = tf.identity(x)
-        
         #downsample
         x = downsample(x, n_feats, scale, conv_type, downsample_type)
 
@@ -52,7 +50,7 @@ class Edsr:
         for i in range(self.B):
             x = self.resBlock(x, (i*2))
 
-        # last conv
+        
         x = tf.nn.conv2d(x, filter=self.filter_two, strides=[1, 1, 1, 1], padding='SAME')
         x = x + self.bias_two
 
@@ -60,7 +58,7 @@ class Edsr:
         x = tf.nn.conv2d(x, filter=self.filter_three, strides=[1, 1, 1, 1], padding='SAME')
         x = x + self.bias_three
         out = tf.depth_to_space(x, self.scale, data_format='NHWC', name="NHWC_output")
-        x = x + out1
+        x = out + out1
 
         # -- --
 
@@ -103,7 +101,7 @@ class Edsr:
                 raise Exception('Unknown conv type', conv_type)
         return x
 
-    def downsample(x, n_feats, scale=4, conv_type='default', sample_type='subpixel', name='downsample'):
+    def downsample(x, n_feats, scale=2, conv_type='default', sample_type='subpixel', name='downsample'):
         with tf.variable_scope(name):
             if sample_type == 'desubpixel':
                 assert scale == 2 or scale == 4

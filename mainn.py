@@ -19,6 +19,7 @@ if __name__ == "__main__":
     parser.add_argument('--train', help='Train the model', action="store_true")
     parser.add_argument('--test', help='Run PSNR test on an image', action="store_true")
     parser.add_argument('--downsample_type', type=str, default='desubpixel')
+    parser.add_argument('--conv_type', type=str, default='default')
     parser.add_argument('--upscale', help='Upscale an image with desired scale', action="store_true")
     parser.add_argument('--export', help='Export the model as .pb', action="store_true")
     parser.add_argument('--fromscratch', help='Load previous model for training',action="store_false")
@@ -26,7 +27,7 @@ if __name__ == "__main__":
     # numbers
     parser.add_argument('--quant', type=int, help='Quantize to shrink .pb file size. 1=round_weights. 2=quantize_weights. 3=round_weights&quantize.', default=0)
     parser.add_argument('--B', type=int, help='Number of resBlocks', default=32)
-    parser.add_argument('--F', type=int, help='Number of filters', default=256)
+    parser.add_argument('--F', type=int, help='Number of filters', default=16)
     parser.add_argument('--scale', type=int, help='Scaling factor of the model', default=2)
     parser.add_argument('--batch', type=int, help='Batch size of the training', default=16)
     parser.add_argument('--epochs', type=int, help='Number of epochs during training', default=20)
