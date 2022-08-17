@@ -23,14 +23,14 @@ class Edsr:
         self.resBiases = list()
 
         for i in range(0, B*2):
-            self.resFilters.append( tf.get_variable("resFilter%d" % (i), shape=[3,3,F,F], initializer=self.xavier))
+            self.resFilters.append( tf.get_variable("resFilter%d" % (i), shape=[3,3,F], initializer=self.xavier))
             self.resBiases.append(tf.get_variable(name="resBias%d" % (i), shape=[F], initializer=self.bias_initializer))
 
-        self.filter_one = tf.get_variable("resFilter_one", shape=[3,3,3,F], initializer=self.xavier)
+        #self.filter_one = tf.get_variable("resFilter_one", shape=[3,3,3,F], initializer=self.xavier)
         self.filter_two = tf.get_variable("resFilter_two", shape=[3,3,F,F], initializer=self.xavier)
         self.filter_three = tf.get_variable("resFilter_three", shape=[3,3,F,self.PS], initializer=self.xavier)
 
-        self.bias_one = tf.get_variable(shape=[F], initializer=self.bias_initializer, name="BiasOne")
+        #self.bias_one = tf.get_variable(shape=[F], initializer=self.bias_initializer, name="BiasOne")
         self.bias_two = tf.get_variable(shape=[F], initializer=self.bias_initializer, name="BiasTwo")
         self.bias_three = tf.get_variable(shape=[self.PS], initializer=self.bias_initializer, name="BiasThree")
 

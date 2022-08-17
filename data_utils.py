@@ -16,19 +16,18 @@ def getpathsx(path):
     return all_image_paths
 
 def getpaths(path):
-    """
-    Get all image paths from folder 'path' while avoiding ._ files.
-    """
+
     im_paths = []
     for fil in os.listdir(path):
-            if '.png' in fil:
-                pass
+        ext = ['png', 'jpg','jpeg']
+        if exit in fil:
+            pass
 
     return im_paths
 
 def make_val_dataset(paths, scale, mean):
     """
-    Python generator-style dataset for the validation set. Creates input and ground truth.
+    Python generator-style dataset for the validation set.
     """
     for p in paths:
         # normalize
@@ -94,7 +93,7 @@ def calcmean(imageFolder, bgr):
     """
     paths = getpaths(imageFolder)
 
-    total_mean = [0, 0, 0]
+    total_mean = [0, 0, 0] #RGB Channel
     im_counter = 0
 
     for p in paths:
